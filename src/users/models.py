@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from encrypted_id.models import EncryptedIDModel, EncryptedIDManager
+from django.utils.translation import ugettext_lazy as _
 
 
 # Create your models here.
@@ -47,10 +48,16 @@ class User(AbstractBaseUser, EncryptedIDModel):
         """,
     )
     admin = models.BooleanField(default=False)
+    is_active = models.BooleanField(_('active'), default=True, help_text=_("""
+                Designates whether this user should be treated as active.
+                 Un-select this instead of deleting accounts.
+            """))
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []  # Email and password are required default
+
+    object = UserManager()
 
     def get_full_name(self):
         return self.email
@@ -77,6 +84,5 @@ class User(AbstractBaseUser, EncryptedIDModel):
     def is_admin(self):
         return self.admin
 
-    @property
-    def is_active(self):
-        return self.is_active
+    def get_group(self):
+        return self.objects.values('groups')
