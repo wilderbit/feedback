@@ -4,7 +4,7 @@ colorama==0.4.0
 decorator==4.3.0
 Django==1.11.1
 django-encrypted-id==0.3.1
-ipython==7.0.1
+ipython==8.10.0
 ipython-genutils==0.2.0
 jedi==0.12.1
 parso==0.3.1
